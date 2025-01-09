@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register, Login, Input Data, Logout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Authentication and Data Input</h1>
+
+    <!-- Register Form -->
+    <div class="form-container" id="register-form">
+        <h2>Register</h2>
+        <form onsubmit="register(event)">
+            <label for="register-username">Username:</label>
+            <input type="text" id="register-username" required>
+
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" required>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" id="login-form" style="display:none;">
+        <h2>Login</h2>
+        <form onsubmit="login(event)">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" required>
+
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- Data Input Form -->
+    <div class="form-container" id="input-data-form" style="display:none;">
+        <h2>Input Data</h2>
+        <form onsubmit="inputData(event)">
+            <label for="data-input">Your Data:</label>
+            <input type="text" id="data-input" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        const users = [];
+        let currentUser = null;
+
+        function register(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists!');
+                return;
+            }
+
+            users.push({ username, password });
+            alert('Registration successful!');
+
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        function login(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const user = users.find(user => user.username === username && user.password === password);
+
+            if (!user) {
+                alert('Invalid credentials!');
+                return;
+            }
+
+            currentUser = user;
+            alert(`Welcome, ${username}!`);
+
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('input-data-form').style.display = 'block';
+        }
+
+        function inputData(event) {
+            event.preventDefault();
+
+            const data = document.getElementById('data-input').value;
+            alert(`Data submitted: ${data}`);
+
+            document.getElementById('data-input').value = '';
+        }
+
+        function logout() {
+            currentUser = null;
+            alert('Logged out successfully!');
+
+            document.getElementById('input-data-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
